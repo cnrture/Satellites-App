@@ -46,9 +46,24 @@ fun SatellitesNormalText(
     Text(
         modifier = modifier,
         text = text,
-        style = MaterialTheme.typography.bodySmall,
+        style = MaterialTheme.typography.bodyMedium,
         fontWeight = FontWeight.Normal,
         color = Color.Black,
+        textAlign = TextAlign.Center
+    )
+}
+
+@Composable
+fun SatellitesLightText(
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        modifier = modifier,
+        text = text,
+        style = MaterialTheme.typography.bodySmall,
+        fontWeight = FontWeight.Normal,
+        color = Color.Gray,
         textAlign = TextAlign.Center
     )
 }
@@ -61,7 +76,7 @@ fun SatellitesHeadLineText(
     Text(
         modifier = modifier,
         text = text,
-        style = MaterialTheme.typography.headlineSmall,
+        style = MaterialTheme.typography.headlineMedium,
         fontWeight = FontWeight.SemiBold,
         color = Color.Black,
         textAlign = TextAlign.Center

@@ -61,7 +61,7 @@ fun SatellitesRoute(
 }
 
 @Composable
-internal fun SatellitesScreen(
+fun SatellitesScreen(
     state: SatellitesState,
     effect: SatellitesEffect,
     onSatelliteClick: (Satellite) -> Unit,

@@ -16,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.canerture.satellitesapp.ui.base.components.SatellitesAlertDialog
 import com.canerture.satellitesapp.ui.base.components.SatellitesBoldText
 import com.canerture.satellitesapp.ui.base.components.SatellitesHeadLineText
+import com.canerture.satellitesapp.ui.base.components.SatellitesLightText
 import com.canerture.satellitesapp.ui.base.components.SatellitesNormalText
 
 @Composable
@@ -34,7 +35,7 @@ fun DetailRoute(
 }
 
 @Composable
-internal fun DetailScreen(
+fun DetailScreen(
     state: DetailState,
     effect: DetailEffect,
     modifier: Modifier = Modifier
@@ -69,11 +70,13 @@ internal fun DetailScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                SatellitesNormalText(text = it.firstFlight)
+                SatellitesLightText(text = it.firstFlight.replace("-", "."))
 
                 Spacer(modifier = Modifier.height(48.dp))
 
-                Row {
+                Row(
+
+                ) {
                     SatellitesBoldText(text = "Height/Mass: ")
                     SatellitesNormalText(text = "${it.height}/${it.mass}")
                 }
