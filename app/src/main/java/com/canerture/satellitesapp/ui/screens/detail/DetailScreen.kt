@@ -60,7 +60,7 @@ internal fun DetailScreen(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        state.satellite?.let {
+        state.satelliteDetail?.let {
 
         }
     }

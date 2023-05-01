@@ -2,7 +2,7 @@ package com.canerture.satellitesapp.ui.screens.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.canerture.satellitesapp.data.model.Satellite
+import com.canerture.satellitesapp.data.model.SatelliteDetail
 import com.canerture.satellitesapp.ui.base.viewmodel.BaseViewModel
 import com.canerture.satellitesapp.ui.base.viewmodel.Effect
 import com.canerture.satellitesapp.ui.base.viewmodel.Event
@@ -23,21 +23,14 @@ class DetailViewModel @Inject constructor(
     override fun handleEvents(event: DetailEvent) {
         when (event) {
             DetailEvent.Idle -> Unit
-            is DetailEvent.SatelliteSearched -> {
-
-            }
-
-            is DetailEvent.SatelliteClicked -> {
-
-            }
         }
     }
 
     init {
-        getSatelliteDetail(getSatelliteId() ?: 1)
+        getSatelliteDetail(getSatelliteId()?.toInt() ?: 1)
     }
 
-    private fun getSatelliteId() = savedStateHandle.get<Int>("satelliteId")
+    private fun getSatelliteId() = savedStateHandle.get<String>("satelliteId")
 
     private fun getSatelliteDetail(satelliteId: Int) = viewModelScope.launch {
 
@@ -46,13 +39,11 @@ class DetailViewModel @Inject constructor(
 
 data class DetailState(
     val isLoading: Boolean = false,
-    val satellite: Satellite? = null
+    val satelliteDetail: SatelliteDetail? = null
 ) : State
 
 sealed class DetailEvent : Event {
     object Idle : DetailEvent()
-    data class SatelliteSearched(val query: String) : DetailEvent()
-    data class SatelliteClicked(val query: String) : DetailEvent()
 }
 
 sealed class DetailEffect : Effect {
