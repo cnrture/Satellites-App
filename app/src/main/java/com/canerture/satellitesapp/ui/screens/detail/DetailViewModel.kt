@@ -2,6 +2,7 @@ package com.canerture.satellitesapp.ui.screens.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.canerture.satellitesapp.common.getDataFromJsonString
 import com.canerture.satellitesapp.data.model.Position
 import com.canerture.satellitesapp.data.model.Satellite
 import com.canerture.satellitesapp.data.model.SatelliteDetail
@@ -35,7 +36,8 @@ class DetailViewModel @Inject constructor(
         getSatelliteDetail(getSatelliteArg())
     }
 
-    private fun getSatelliteArg() = Satellite.fromJson(savedStateHandle["satellite"] ?: "")
+    private fun getSatelliteArg() =
+        getDataFromJsonString<Satellite>((savedStateHandle["satellite"] ?: ""))
 
     private fun getSatelliteDetail(satellite: Satellite?) = viewModelScope.launch {
         satellite?.let { satellite ->
