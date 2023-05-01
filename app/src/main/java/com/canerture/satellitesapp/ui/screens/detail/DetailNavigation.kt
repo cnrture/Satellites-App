@@ -9,15 +9,18 @@ import androidx.navigation.compose.composable
 const val detailNavigationRoute = "detail_route"
 
 fun NavController.navigateDetail(
-    satelliteId: Int,
+    satellite: String,
     navOptions: NavOptions? = null
 ) {
-    this.navigate(detailNavigationRoute.plus("?satelliteId=${satelliteId}"), navOptions)
+    this.navigate(
+        detailNavigationRoute.plus("?satellite=${satellite}"),
+        navOptions
+    )
 }
 
 fun NavGraphBuilder.detailScreen(isLoading: (Boolean) -> Unit) {
     composable(
-        detailNavigationRoute.plus("?satelliteId={satelliteId}"),
+        detailNavigationRoute.plus("?satellite={satellite}"),
         content = {
             DetailRoute(
                 isLoading = isLoading,

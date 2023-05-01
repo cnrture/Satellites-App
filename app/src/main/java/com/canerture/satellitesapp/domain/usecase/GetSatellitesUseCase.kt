@@ -14,7 +14,7 @@ class GetSatellitesUseCase @Inject constructor(
 
         when (val result = satellitesRepository.getSatellites()) {
             is Resource.Success -> {
-                if (result.data.isEmpty()) {
+                if (result.data.isNullOrEmpty()) {
                     emit(GetSatellitesUseCaseState.EmptyList)
                 } else {
                     emit(GetSatellitesUseCaseState.Satellites(result.data))

@@ -2,7 +2,9 @@ package com.canerture.satellitesapp.ui.screens.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.canerture.satellitesapp.data.model.Satellite
 import com.canerture.satellitesapp.data.model.SatelliteDetail
+import com.canerture.satellitesapp.domain.usecase.GetSatelliteDetailUseCase
 import com.canerture.satellitesapp.ui.base.viewmodel.BaseViewModel
 import com.canerture.satellitesapp.ui.base.viewmodel.Effect
 import com.canerture.satellitesapp.ui.base.viewmodel.Event
@@ -13,6 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
+    private val getSatelliteDetailUseCase: GetSatelliteDetailUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : BaseViewModel<DetailState, DetailEvent, DetailEffect>() {
 
@@ -27,18 +30,43 @@ class DetailViewModel @Inject constructor(
     }
 
     init {
-        getSatelliteDetail(getSatelliteId()?.toInt() ?: 1)
+        getSatelliteDetail(getSatelliteArg())
     }
 
-    private fun getSatelliteId() = savedStateHandle.get<String>("satelliteId")
+    private fun getSatelliteArg() = Satellite.fromJson(savedStateHandle["satellite"] ?: "")
 
-    private fun getSatelliteDetail(satelliteId: Int) = viewModelScope.launch {
+    private fun getSatelliteDetail(satellite: Satellite?) = viewModelScope.launch {
+        satellite?.let { satellite ->
+            getSatelliteDetailUseCase.invoke(satellite.id).collect {
+                when (it) {
+                    is GetSatelliteDetailUseCase.GetSatelliteDetailUseCaseState.SatelliteDetailItem -> {
+                        setState(
+                            getCurrentState().copy(
+                                satelliteName = satellite.name,
+                                satelliteDetail = it.satelliteDetail
+                            )
+                        )
+                    }
 
+                    is GetSatelliteDetailUseCase.GetSatelliteDetailUseCaseState.Error -> {
+                        setEffect(DetailEffect.ShowError(it.message))
+                    }
+
+                    GetSatelliteDetailUseCase.GetSatelliteDetailUseCaseState.EmptySatellite -> {
+                        setEffect(DetailEffect.ShowError("it.message"))
+                    }
+                }
+            }
+            setState(getCurrentState().copy(isLoading = false))
+        } ?: kotlin.run {
+            setEffect(DetailEffect.ShowError("it.message"))
+        }
     }
 }
 
 data class DetailState(
     val isLoading: Boolean = false,
+    val satelliteName: String? = null,
     val satelliteDetail: SatelliteDetail? = null
 ) : State
 

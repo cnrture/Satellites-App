@@ -42,7 +42,7 @@ import com.canerture.satellitesapp.ui.base.components.SearchBar
 
 @Composable
 fun SatellitesRoute(
-    onSatelliteClick: (Int) -> Unit,
+    onSatelliteClick: (Satellite) -> Unit,
     isLoading: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SatellitesViewModel = hiltViewModel()
@@ -51,11 +51,11 @@ fun SatellitesRoute(
     val satellitesEffect = viewModel.effect.value
 
     SatellitesScreen(
-        satellitesState,
-        satellitesEffect,
+        state = satellitesState,
+        effect = satellitesEffect,
         isLoading = isLoading,
         onSatelliteClick = onSatelliteClick,
-        modifier
+        modifier = modifier
     )
 }
 
@@ -64,7 +64,7 @@ internal fun SatellitesScreen(
     state: SatellitesState,
     effect: SatellitesEffect,
     isLoading: (Boolean) -> Unit,
-    onSatelliteClick: (Int) -> Unit,
+    onSatelliteClick: (Satellite) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -125,7 +125,7 @@ internal fun SatellitesScreen(
 @Composable
 fun SatelliteItem(
     satellite: Satellite,
-    onSatelliteClick: (Int) -> Unit,
+    onSatelliteClick: (Satellite) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column {
@@ -134,7 +134,7 @@ fun SatelliteItem(
                 .fillMaxWidth()
                 .wrapContentWidth()
                 .wrapContentHeight()
-                .clickable { onSatelliteClick(satellite.id) },
+                .clickable { onSatelliteClick(satellite) },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {

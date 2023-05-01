@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.canerture.satellitesapp.common.toJson
 import com.canerture.satellitesapp.ui.screens.detail.detailScreen
 import com.canerture.satellitesapp.ui.screens.detail.navigateDetail
 import com.canerture.satellitesapp.ui.screens.satellites.satellitesNavigationRoute
@@ -22,7 +23,7 @@ fun NavGraph(isLoading: (Boolean) -> Unit) {
         startDestination = satellitesNavigationRoute
     ) {
         satellitesScreen(
-            onSatelliteClick = { navController.navigateDetail(it) },
+            onSatelliteClick = { navController.navigateDetail(it.toJson()) },
             isLoading = isLoading
         )
         detailScreen { isLoading(it) }
