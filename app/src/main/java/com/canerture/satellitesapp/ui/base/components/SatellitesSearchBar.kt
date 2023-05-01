@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(
+fun SatellitesSearchBar(
     placeHolder: String,
     keyboardType: KeyboardType,
     imeAction: ImeAction,

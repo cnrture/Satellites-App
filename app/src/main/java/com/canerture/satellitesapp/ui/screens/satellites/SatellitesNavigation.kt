@@ -6,13 +6,11 @@ import com.canerture.satellitesapp.common.Constants.Route
 import com.canerture.satellitesapp.data.model.Satellite
 
 fun NavGraphBuilder.satellitesScreen(
-    isLoading: (Boolean) -> Unit,
     onSatelliteClick: (Satellite) -> Unit
 ) {
     composable(Route.satellitesNavigationRoute) {
         SatellitesRoute(
-            onSatelliteClick = onSatelliteClick,
-            isLoading = isLoading
+            onSatelliteClick = onSatelliteClick
         )
     }
 }

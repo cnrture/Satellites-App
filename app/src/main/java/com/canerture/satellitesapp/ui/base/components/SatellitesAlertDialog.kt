@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun AlertDialog(
+fun SatellitesAlertDialog(
     errorMessage: String,
     modifier: Modifier = Modifier
 ) {

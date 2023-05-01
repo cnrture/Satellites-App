@@ -12,7 +12,7 @@ import com.canerture.satellitesapp.ui.screens.detail.navigateDetail
 import com.canerture.satellitesapp.ui.screens.satellites.satellitesScreen
 
 @Composable
-fun NavGraph(isLoading: (Boolean) -> Unit) {
+fun NavGraph() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -23,9 +23,8 @@ fun NavGraph(isLoading: (Boolean) -> Unit) {
         startDestination = Route.satellitesNavigationRoute
     ) {
         satellitesScreen(
-            onSatelliteClick = { navController.navigateDetail(it.toJson()) },
-            isLoading = isLoading
+            onSatelliteClick = { navController.navigateDetail(it.toJson()) }
         )
-        detailScreen { isLoading(it) }
+        detailScreen()
     }
 }

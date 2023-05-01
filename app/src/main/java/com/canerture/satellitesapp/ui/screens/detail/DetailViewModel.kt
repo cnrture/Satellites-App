@@ -20,17 +20,10 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(
     private val getSatelliteDetailUseCase: GetSatelliteDetailUseCase,
     private val savedStateHandle: SavedStateHandle
-) : BaseViewModel<DetailState, DetailEvent, DetailEffect>() {
+) : BaseViewModel<DetailState, DetailEffect>() {
 
     override fun setInitialState() = DetailState(true)
     override fun setInitialEffect() = DetailEffect.Idle
-    override fun setInitialEvent() = DetailEvent.Idle
-
-    override fun handleEvents(event: DetailEvent) {
-        when (event) {
-            DetailEvent.Idle -> Unit
-        }
-    }
 
     init {
         getSatelliteDetail(getSatelliteArg())

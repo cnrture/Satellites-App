@@ -17,12 +17,11 @@ fun NavController.navigateDetail(
     )
 }
 
-fun NavGraphBuilder.detailScreen(isLoading: (Boolean) -> Unit) {
+fun NavGraphBuilder.detailScreen() {
     composable(
         Route.detailNavigationRoute.plus("?satellite={satellite}"),
         content = {
             DetailRoute(
-                isLoading = isLoading,
                 viewModel = hiltViewModel()
             )
         }

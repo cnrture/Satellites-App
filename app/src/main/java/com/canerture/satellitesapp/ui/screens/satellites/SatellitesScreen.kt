@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -23,27 +24,25 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.canerture.satellitesapp.data.model.Satellite
-import com.canerture.satellitesapp.ui.base.components.AlertDialog
-import com.canerture.satellitesapp.ui.base.components.SearchBar
+import com.canerture.satellitesapp.ui.base.components.SatellitesAlertDialog
+import com.canerture.satellitesapp.ui.base.components.SatellitesNormalText
+import com.canerture.satellitesapp.ui.base.components.SatellitesProgressBar
+import com.canerture.satellitesapp.ui.base.components.SatellitesSearchBar
+import com.canerture.satellitesapp.ui.base.components.SatellitesSemiBoldText
 
 @Composable
 fun SatellitesRoute(
     onSatelliteClick: (Satellite) -> Unit,
-    isLoading: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SatellitesViewModel = hiltViewModel()
 ) {
@@ -53,8 +52,10 @@ fun SatellitesRoute(
     SatellitesScreen(
         state = satellitesState,
         effect = satellitesEffect,
-        isLoading = isLoading,
         onSatelliteClick = onSatelliteClick,
+        onQueryTextChange = {
+            viewModel.onQueryTextChange(it)
+        },
         modifier = modifier
     )
 }
@@ -63,12 +64,10 @@ fun SatellitesRoute(
 internal fun SatellitesScreen(
     state: SatellitesState,
     effect: SatellitesEffect,
-    isLoading: (Boolean) -> Unit,
     onSatelliteClick: (Satellite) -> Unit,
+    onQueryTextChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-
-    isLoading(state.isLoading)
 
     when (effect) {
         SatellitesEffect.Idle -> Unit
@@ -78,7 +77,7 @@ internal fun SatellitesScreen(
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                AlertDialog(
+                SatellitesAlertDialog(
                     errorMessage = effect.message
                 )
             }
@@ -94,26 +93,28 @@ internal fun SatellitesScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        SearchBar(
+        SatellitesSearchBar(
             placeHolder = "Search",
             keyboardType = KeyboardType.Text,
             imeAction = ImeAction.Search,
             keyboardActions = KeyboardActions(
                 onSearch = { focusManager.clearFocus() }
             ),
-        ) {
-
+        ) { query ->
+            onQueryTextChange(query)
         }
+
+        SatellitesProgressBar(isVisible = state.isLoading)
 
         state.satellites?.let {
             LazyColumn(
-                contentPadding = PaddingValues(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 items(it) { satelliteItem ->
                     SatelliteItem(
                         satellite = satelliteItem,
+                        isLastItem = satelliteItem.id == it.size,
                         onSatelliteClick = onSatelliteClick
                     )
                 }
@@ -125,6 +126,7 @@ internal fun SatellitesScreen(
 @Composable
 fun SatelliteItem(
     satellite: Satellite,
+    isLastItem: Boolean,
     onSatelliteClick: (Satellite) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -132,7 +134,6 @@ fun SatelliteItem(
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .wrapContentWidth()
                 .wrapContentHeight()
                 .clickable { onSatelliteClick(satellite) },
             verticalAlignment = Alignment.CenterVertically,
@@ -143,33 +144,30 @@ fun SatelliteItem(
                     .background(
                         color = if (satellite.active) Color.Green else Color.Red,
                         shape = CircleShape
-                    ),
+                    )
+                    .wrapContentWidth(),
                 imageVector = if (satellite.active) Icons.Filled.Check else Icons.Filled.Close,
                 tint = Color.White,
                 contentDescription = ""
             )
-            Spacer(modifier = Modifier.width(12.dp))
-            Column {
-                Text(
-                    text = satellite.name,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.Black,
-                    modifier = Modifier
-                        .padding(4.dp),
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    text = if (satellite.active) "Active" else "Passive",
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.Normal,
-                    color = Color.Black,
-                    modifier = Modifier
-                        .padding(4.dp),
-                    textAlign = TextAlign.Center
-                )
+
+            Spacer(modifier = Modifier.width(24.dp))
+
+            Column(
+                modifier = Modifier.fillMaxWidth(0.3f)
+            ) {
+                SatellitesSemiBoldText(text = satellite.name)
+
+                Spacer(modifier = Modifier.height(2.dp))
+
+                SatellitesNormalText(text = if (satellite.active) "Active" else "Passive")
             }
         }
-        Divider()
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        if (!isLastItem) Divider()
+
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }
