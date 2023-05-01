@@ -1,6 +1,8 @@
 package com.canerture.satellitesapp.data.datasource.json
 
 import android.content.Context
+import com.canerture.satellitesapp.common.Constants.Json
+import com.canerture.satellitesapp.common.Constants.Name
 import com.canerture.satellitesapp.common.Resource
 import com.canerture.satellitesapp.data.model.Satellite
 import com.canerture.satellitesapp.data.model.SatelliteDetail
@@ -13,7 +15,7 @@ class JsonDataSourceImpl(
 
     override suspend fun getSatellites(): Resource<List<Satellite>> =
         try {
-            val inputStream: InputStream = context.assets.open("satellite-list.json")
+            val inputStream: InputStream = context.assets.open(Json.SATELLITE_LIST_JSON)
             val inputString = inputStream.bufferedReader().use { it.readText() }
 
             val satelliteList = mutableListOf<Satellite>()
@@ -22,9 +24,9 @@ class JsonDataSourceImpl(
                 val jsonObject = jsonArray.getJSONObject(i)
                 satelliteList.add(
                     Satellite(
-                        id = jsonObject.optInt("id"),
-                        active = jsonObject.optBoolean("active"),
-                        name = jsonObject.optString("name")
+                        id = jsonObject.optInt(Name.ID),
+                        active = jsonObject.optBoolean(Name.ACTIVE),
+                        name = jsonObject.optString(Name.NAME)
                     )
                 )
             }
@@ -35,7 +37,7 @@ class JsonDataSourceImpl(
 
     override suspend fun getSatelliteDetail(satelliteId: Int): Resource<SatelliteDetail?> =
         try {
-            val inputStream: InputStream = context.assets.open("satellite-detail.json")
+            val inputStream: InputStream = context.assets.open(Json.SATELLITE_DETAIL_JSON)
             val inputString = inputStream.bufferedReader().use { it.readText() }
 
             val satelliteDetailList = mutableListOf<SatelliteDetail>()
@@ -44,11 +46,11 @@ class JsonDataSourceImpl(
                 val jsonObject = jsonArray.getJSONObject(i)
                 satelliteDetailList.add(
                     SatelliteDetail(
-                        id = jsonObject.optInt("id"),
-                        costPerLaunch = jsonObject.optLong("cost_per_launch"),
-                        firstFlight = jsonObject.optString("first_flight"),
-                        height = jsonObject.optInt("height"),
-                        mass = jsonObject.optLong("mass"),
+                        id = jsonObject.optInt(Name.ID),
+                        costPerLaunch = jsonObject.optLong(Name.COST_PER_LAUNCH),
+                        firstFlight = jsonObject.optString(Name.FIRST_FLIGHT),
+                        height = jsonObject.optInt(Name.HEIGHT),
+                        mass = jsonObject.optLong(Name.MASS),
                     )
                 )
             }

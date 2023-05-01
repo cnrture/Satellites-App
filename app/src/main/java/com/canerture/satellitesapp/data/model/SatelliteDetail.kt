@@ -2,6 +2,7 @@ package com.canerture.satellitesapp.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.canerture.satellitesapp.common.Constants.Name
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "satellite_detail")
@@ -9,9 +10,9 @@ data class SatelliteDetail(
 
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    @SerializedName("cost_per_launch")
+    @SerializedName(Name.COST_PER_LAUNCH)
     val costPerLaunch: Long,
-    @SerializedName("first_flight")
+    @SerializedName(Name.FIRST_FLIGHT)
     val firstFlight: String,
     val height: Int,
     val mass: Long
