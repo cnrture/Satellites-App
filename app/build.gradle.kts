@@ -1,6 +1,6 @@
 plugins {
     id("com.android.application")
-    kotlin("android")
+    id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
 }
@@ -87,8 +87,12 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.room.runtime)
-    annotationProcessor(libs.room.compiler)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
 
     implementation(libs.gson.google)
 
+    implementation(libs.lifecycle.runtimeCompose)
+
+    implementation(libs.accompanist.navigation.animation)
 }
