@@ -11,7 +11,6 @@ import com.canerture.satellitesapp.data.model.SatellitePosition
     version = 1,
     exportSchema = false
 )
-
 @TypeConverters(SatelliteTypeConverters::class)
 abstract class SatellitesDatabase : RoomDatabase() {
     abstract fun getSatelliteDao(): SatellitesDao

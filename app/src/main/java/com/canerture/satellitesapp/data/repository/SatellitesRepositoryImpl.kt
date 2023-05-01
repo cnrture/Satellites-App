@@ -10,4 +10,5 @@ class SatellitesRepositoryImpl @Inject constructor(
     private val roomDataSource: RoomDataSource
 ) : SatellitesRepository {
 
+    override suspend fun getSatellites() = jsonDataSource.getSatellites()
 }

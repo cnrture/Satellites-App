@@ -29,9 +29,8 @@ object DataSourceModule {
     @Provides
     @Singleton
     fun provideJsonDataSource(
-        gson: Gson,
         @ApplicationContext context: Context
-    ): JsonDataSource = JsonDataSourceImpl(gson, context)
+    ): JsonDataSource = JsonDataSourceImpl(context)
 
     @Provides
     @Singleton
@@ -40,13 +39,12 @@ object DataSourceModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(
+    fun provideSatellitesDatabase(
         @ApplicationContext context: Context,
         typeConverters: SatelliteTypeConverters
     ): SatellitesDatabase = Room
         .databaseBuilder(context, SatellitesDatabase::class.java, "satellites.db")
         .addTypeConverter(typeConverters)
-        .fallbackToDestructiveMigration()
         .build()
 
     @Provides
