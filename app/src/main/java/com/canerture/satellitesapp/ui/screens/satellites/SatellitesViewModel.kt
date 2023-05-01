@@ -1,4 +1,4 @@
-package com.canerture.satellitesapp.ui.satellites
+package com.canerture.satellitesapp.ui.screens.satellites
 
 import androidx.lifecycle.viewModelScope
 import com.canerture.satellitesapp.data.model.Satellite

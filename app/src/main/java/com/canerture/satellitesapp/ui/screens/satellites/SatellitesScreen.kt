@@ -1,4 +1,4 @@
-package com.canerture.satellitesapp.ui.satellites
+package com.canerture.satellitesapp.ui.screens.satellites
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
