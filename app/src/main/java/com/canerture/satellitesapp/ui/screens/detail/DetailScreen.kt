@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -84,33 +85,30 @@ internal fun DetailScreen(
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.SemiBold,
                     color = Color.Black,
-                    modifier = Modifier
-                        .padding(4.dp),
+                    modifier = Modifier,
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
                     text = it.firstFlight,
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Normal,
                     color = Color.Black,
-                    modifier = Modifier
-                        .padding(4.dp),
+                    modifier = Modifier,
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.height(48.dp))
 
                 Row {
                     Text(
-                        text = "Height/Mass:",
+                        text = "Height/Mass: ",
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black,
-                        modifier = Modifier
-                            .padding(4.dp),
+                        modifier = Modifier,
                         textAlign = TextAlign.Center
                     )
                     Text(
@@ -118,22 +116,20 @@ internal fun DetailScreen(
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Normal,
                         color = Color.Black,
-                        modifier = Modifier
-                            .padding(4.dp),
+                        modifier = Modifier,
                         textAlign = TextAlign.Center
                     )
                 }
 
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 Row {
                     Text(
-                        text = "Cost:",
+                        text = "Cost: ",
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black,
-                        modifier = Modifier
-                            .padding(4.dp),
+                        modifier = Modifier,
                         textAlign = TextAlign.Center
                     )
                     Text(
@@ -141,31 +137,28 @@ internal fun DetailScreen(
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Normal,
                         color = Color.Black,
-                        modifier = Modifier
-                            .padding(4.dp),
+                        modifier = Modifier,
                         textAlign = TextAlign.Center
                     )
                 }
 
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 Row {
                     Text(
-                        text = "Last Position:",
+                        text = "Last Position: ",
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black,
-                        modifier = Modifier
-                            .padding(4.dp),
+                        modifier = Modifier,
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        text = "sdasadsad",
+                        text = "(${state.position?.posX}, ${state.position?.posY})",
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Normal,
                         color = Color.Black,
-                        modifier = Modifier
-                            .padding(4.dp),
+                        modifier = Modifier,
                         textAlign = TextAlign.Center
                     )
                 }

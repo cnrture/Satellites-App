@@ -16,6 +16,10 @@ object Constants {
         const val FIRST_FLIGHT = "first_flight"
         const val HEIGHT = "height"
         const val MASS = "mass"
+        const val LIST = "list"
+        const val POSITIONS = "positions"
+        const val POS_X = "posX"
+        const val POS_Y = "posY"
     }
 
     object Route {

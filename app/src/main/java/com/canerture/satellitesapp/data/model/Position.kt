@@ -1,6 +1,6 @@
 package com.canerture.satellitesapp.data.model
 
 data class Position(
-    val posX: Float,
-    val posY: Float
+    val posX: Double,
+    val posY: Double
 )

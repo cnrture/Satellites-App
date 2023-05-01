@@ -2,6 +2,7 @@ package com.canerture.satellitesapp.ui.screens.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.canerture.satellitesapp.data.model.Position
 import com.canerture.satellitesapp.data.model.Satellite
 import com.canerture.satellitesapp.data.model.SatelliteDetail
 import com.canerture.satellitesapp.domain.usecase.GetSatelliteDetailUseCase
@@ -10,6 +11,7 @@ import com.canerture.satellitesapp.ui.base.viewmodel.Effect
 import com.canerture.satellitesapp.ui.base.viewmodel.Event
 import com.canerture.satellitesapp.ui.base.viewmodel.State
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,14 +40,20 @@ class DetailViewModel @Inject constructor(
     private fun getSatelliteDetail(satellite: Satellite?) = viewModelScope.launch {
         satellite?.let { satellite ->
             getSatelliteDetailUseCase.invoke(satellite.id).collect {
+                setState(getCurrentState().copy(isLoading = false))
                 when (it) {
                     is GetSatelliteDetailUseCase.GetSatelliteDetailUseCaseState.SatelliteDetailItem -> {
                         setState(
                             getCurrentState().copy(
                                 satelliteName = satellite.name,
-                                satelliteDetail = it.satelliteDetail
+                                satelliteDetail = it.satelliteDetail,
+                                position = it.position.getOrNull(0)
                             )
                         )
+                        for (i in 1 until it.position.size) {
+                            delay(3000)
+                            setState(getCurrentState().copy(position = it.position.getOrNull(i)))
+                        }
                     }
 
                     is GetSatelliteDetailUseCase.GetSatelliteDetailUseCaseState.Error -> {
@@ -57,7 +65,6 @@ class DetailViewModel @Inject constructor(
                     }
                 }
             }
-            setState(getCurrentState().copy(isLoading = false))
         } ?: kotlin.run {
             setEffect(DetailEffect.ShowError("it.message"))
         }
@@ -67,7 +74,8 @@ class DetailViewModel @Inject constructor(
 data class DetailState(
     val isLoading: Boolean = false,
     val satelliteName: String? = null,
-    val satelliteDetail: SatelliteDetail? = null
+    val satelliteDetail: SatelliteDetail? = null,
+    val position: Position? = null
 ) : State
 
 sealed class DetailEvent : Event {
