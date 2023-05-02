@@ -1,9 +1,7 @@
 package com.canerture.satellitesapp.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.canerture.satellitesapp.common.Constants.Route
 import com.canerture.satellitesapp.common.toJson

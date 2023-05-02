@@ -12,7 +12,6 @@ class GetSatellitesUseCaseImpl @Inject constructor(
 ) : GetSatellitesUseCase {
 
     override operator fun invoke(): Flow<GetSatellitesUseCaseState> = flow {
-
         satellitesRepository.getSatellites().collect {
             when (it) {
                 is Resource.Success -> {

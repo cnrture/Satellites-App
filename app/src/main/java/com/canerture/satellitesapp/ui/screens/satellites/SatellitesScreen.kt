@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,9 +35,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.canerture.satellitesapp.R
 import com.canerture.satellitesapp.data.model.Satellite
-import com.canerture.satellitesapp.ui.base.components.EmptyDataScreen
 import com.canerture.satellitesapp.ui.base.components.SatellitesAlertDialog
 import com.canerture.satellitesapp.ui.base.components.SatellitesNormalText
 import com.canerture.satellitesapp.ui.base.components.SatellitesProgressBar
@@ -49,8 +50,8 @@ fun SatellitesRoute(
     modifier: Modifier = Modifier,
     viewModel: SatellitesViewModel = hiltViewModel()
 ) {
-    val satellitesState = viewModel.state.value
-    val satellitesEffect = viewModel.effect.value
+    val satellitesState by viewModel.state.collectAsStateWithLifecycle()
+    val satellitesEffect by viewModel.effect.collectAsStateWithLifecycle(SatellitesEffect.Idle)
 
     SatellitesScreen(
         state = satellitesState,
@@ -110,20 +111,28 @@ fun SatellitesScreen(
         SatellitesProgressBar(isVisible = state.isLoading)
 
         state.satellites?.let {
-            LazyColumn(
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 32.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                items(it) { satelliteItem ->
-                    SatelliteItem(
-                        satellite = satelliteItem,
-                        isLastItem = satelliteItem.id == it.size,
-                        onSatelliteClick = onSatelliteClick
-                    )
-                }
-            }
-        } ?: kotlin.run {
-            EmptyDataScreen()
+            SatelliteLazyColumn(it, onSatelliteClick = onSatelliteClick)
+        }
+    }
+}
+
+@Composable
+fun SatelliteLazyColumn(
+    satellites: List<Satellite>,
+    onSatelliteClick: (Satellite) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        items(satellites) { satelliteItem ->
+            SatelliteItem(
+                satellite = satelliteItem,
+                isLastItem = satelliteItem.id == satellites.size,
+                onSatelliteClick = onSatelliteClick
+            )
         }
     }
 }

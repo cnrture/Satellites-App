@@ -5,12 +5,13 @@ import com.canerture.satellitesapp.domain.usecase.getsatellitedetail.GetSatellit
 import com.canerture.satellitesapp.domain.usecase.getsatellitedetail.GetSatelliteDetailUseCaseImpl
 import com.canerture.satellitesapp.domain.usecase.getsatellites.GetSatellitesUseCase
 import com.canerture.satellitesapp.domain.usecase.getsatellites.GetSatellitesUseCaseImpl
+import com.canerture.satellitesapp.domain.usecase.searchsatellitesusecase.SearchSatellitesUseCase
+import com.canerture.satellitesapp.domain.usecase.searchsatellitesusecase.SearchSatellitesUseCaseImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
-import javax.inject.Singleton
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -27,4 +28,10 @@ object UseCaseModule {
     fun provideGetSatelliteDetailUseCase(
         satellitesRepository: SatellitesRepository
     ): GetSatelliteDetailUseCase = GetSatelliteDetailUseCaseImpl(satellitesRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideSearchSatellitesUseCase(
+        satellitesRepository: SatellitesRepository
+    ): SearchSatellitesUseCase = SearchSatellitesUseCaseImpl(satellitesRepository)
 }

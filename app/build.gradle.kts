@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+    kotlin("plugin.serialization") version "1.8.21"
 }
 
 android {
@@ -97,4 +98,6 @@ dependencies {
     implementation(libs.accompanist.navigation.animation)
 
     implementation(libs.lottie.compose)
+
+    implementation(libs.kotlinx.serialization)
 }

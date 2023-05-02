@@ -6,6 +6,7 @@ import com.canerture.satellitesapp.data.datasource.json.JsonDataSource
 import com.canerture.satellitesapp.data.datasource.json.JsonDataSourceImpl
 import com.canerture.satellitesapp.data.datasource.room.RoomDataSource
 import com.canerture.satellitesapp.data.datasource.room.RoomDataSourceImpl
+import com.canerture.satellitesapp.data.source.local.AssetManager
 import com.canerture.satellitesapp.data.source.room.SatelliteTypeConverters
 import com.canerture.satellitesapp.data.source.room.SatellitesDao
 import com.canerture.satellitesapp.data.source.room.SatellitesDatabase
@@ -16,6 +17,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 @Module
@@ -28,14 +31,31 @@ object DataSourceModule {
 
     @Provides
     @Singleton
-    fun provideJsonDataSource(
-        @ApplicationContext context: Context
-    ): JsonDataSource = JsonDataSourceImpl(context)
+    fun providesNetworkJson(): Json = Json {
+        ignoreUnknownKeys = true
+    }
 
     @Provides
     @Singleton
-    fun provideRoomDataSource(satellitesDao: SatellitesDao): RoomDataSource =
-        RoomDataSourceImpl(satellitesDao)
+    fun providesFakeAssetManager(
+        @ApplicationContext context: Context,
+    ): AssetManager = AssetManager(context.assets::open)
+
+    @Provides
+    @Singleton
+    fun provideJsonDataSource(
+        ioDispatcher: CoroutineDispatcher,
+        assetManager: AssetManager,
+        json: Json
+    ): JsonDataSource = JsonDataSourceImpl(ioDispatcher, assetManager, json)
+
+    @Provides
+    @Singleton
+    fun provideRoomDataSource(
+        satellitesDao: SatellitesDao,
+        ioDispatcher: CoroutineDispatcher
+    ): RoomDataSource =
+        RoomDataSourceImpl(satellitesDao, ioDispatcher)
 
     @Provides
     @Singleton

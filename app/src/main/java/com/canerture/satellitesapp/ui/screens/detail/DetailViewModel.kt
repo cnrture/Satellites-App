@@ -12,8 +12,8 @@ import com.canerture.satellitesapp.domain.usecase.getsatellitedetail.GetSatellit
 import com.canerture.satellitesapp.domain.usecase.getsatellitedetail.GetSatelliteDetailUseCaseImpl
 import com.canerture.satellitesapp.infrastructure.StringResourceProvider
 import com.canerture.satellitesapp.ui.base.viewmodel.BaseViewModel
-import com.canerture.satellitesapp.ui.base.viewmodel.Effect
-import com.canerture.satellitesapp.ui.base.viewmodel.State
+import com.canerture.satellitesapp.ui.base.viewmodel.IEffect
+import com.canerture.satellitesapp.ui.base.viewmodel.IState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,7 +26,6 @@ class DetailViewModel @Inject constructor(
 ) : BaseViewModel<DetailState, DetailEffect>() {
 
     override fun setInitialState() = DetailState(true)
-    override fun setInitialEffect() = DetailEffect.Idle
 
     init {
         getSatelliteDetail(getSatelliteArg())
@@ -38,30 +37,32 @@ class DetailViewModel @Inject constructor(
     private fun getSatelliteDetail(satellite: Satellite?) = viewModelScope.launch {
         satellite?.let { satellite ->
             getSatelliteDetailUseCase.invoke(satellite.id).collect {
-                setState(getCurrentState().copy(isLoading = false))
                 when (it) {
                     is GetSatelliteDetailUseCaseImpl.GetSatelliteDetailUseCaseState.Data -> {
-                        setState(
+                        setState {
                             getCurrentState().copy(
+                                isLoading = false,
                                 satelliteName = satellite.name,
                                 satelliteDetail = it.satelliteDetail,
                                 position = it.position
                             )
-                        )
+                        }
                     }
 
                     is GetSatelliteDetailUseCaseImpl.GetSatelliteDetailUseCaseState.Error -> {
                         setEffect(DetailEffect.ShowError(it.message))
+                        setState { getCurrentState().copy(isLoading = false) }
                     }
 
                     GetSatelliteDetailUseCaseImpl.GetSatelliteDetailUseCaseState.EmptyData -> {
-                        setState(
+                        setState {
                             getCurrentState().copy(
+                                isLoading = false,
                                 satelliteName = null,
                                 satelliteDetail = null,
                                 position = null
                             )
-                        )
+                        }
                     }
                 }
             }
@@ -76,9 +77,9 @@ data class DetailState(
     val satelliteName: String? = null,
     val satelliteDetail: SatelliteDetail? = null,
     val position: Position? = null
-) : State
+) : IState
 
-sealed class DetailEffect : Effect {
+sealed class DetailEffect : IEffect {
     object Idle : DetailEffect()
     data class ShowError(val message: String) : DetailEffect()
 }

@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -33,8 +35,8 @@ fun DetailRoute(
     modifier: Modifier = Modifier,
     viewModel: DetailViewModel = hiltViewModel()
 ) {
-    val detailState = viewModel.state.value
-    val detailEffect = viewModel.effect.value
+    val detailState by viewModel.state.collectAsState()
+    val detailEffect by viewModel.effect.collectAsState(DetailEffect.Idle)
 
     DetailScreen(
         state = detailState,
