@@ -1,5 +1,9 @@
 package com.canerture.satellitesapp.ui.screens.detail
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -90,7 +94,14 @@ fun DetailScreen(
 
                 Row {
                     SatellitesBoldText(text = "Last Position: ")
-                    SatellitesNormalText(text = "(${state.position?.posX}, ${state.position?.posY})")
+                    AnimatedContent(
+                        targetState = "(${state.position?.posX}, ${state.position?.posY})",
+                        transitionSpec = {
+                            slideInVertically { it } with slideOutVertically { -it }
+                        }, label = ""
+                    ) { char ->
+                        SatellitesNormalText(text = char)
+                    }
                 }
             }
         }
