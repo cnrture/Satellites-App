@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.canerture.satellitesapp.R
 import com.canerture.satellitesapp.data.model.Satellite
+import com.canerture.satellitesapp.ui.base.components.EmptyDataScreen
 import com.canerture.satellitesapp.ui.base.components.SatellitesAlertDialog
 import com.canerture.satellitesapp.ui.base.components.SatellitesNormalText
 import com.canerture.satellitesapp.ui.base.components.SatellitesProgressBar
@@ -121,6 +122,8 @@ fun SatellitesScreen(
                     )
                 }
             }
+        } ?: kotlin.run {
+            EmptyDataScreen()
         }
     }
 }

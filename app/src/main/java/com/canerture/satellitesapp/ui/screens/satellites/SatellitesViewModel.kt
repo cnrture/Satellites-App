@@ -1,7 +1,6 @@
 package com.canerture.satellitesapp.ui.screens.satellites
 
 import androidx.lifecycle.viewModelScope
-import com.canerture.satellitesapp.R
 import com.canerture.satellitesapp.data.model.Satellite
 import com.canerture.satellitesapp.domain.usecase.getsatellites.GetSatellitesUseCase
 import com.canerture.satellitesapp.domain.usecase.getsatellites.GetSatellitesUseCaseImpl
@@ -53,7 +52,7 @@ class SatellitesViewModel @Inject constructor(
                 }
 
                 GetSatellitesUseCaseImpl.GetSatellitesUseCaseState.EmptyData -> {
-                    setEffect(SatellitesEffect.ShowError(stringResourceProvider.getString(R.string.something_went_wrong)))
+                    setState(getCurrentState().copy(satellites = null))
                 }
             }
         }

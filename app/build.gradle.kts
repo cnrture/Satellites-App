@@ -95,4 +95,6 @@ dependencies {
     implementation(libs.lifecycle.runtimeCompose)
 
     implementation(libs.accompanist.navigation.animation)
+
+    implementation(libs.lottie.compose)
 }
