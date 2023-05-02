@@ -29,7 +29,7 @@ fun EmptyDataScreen(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center
     ) {
         val composition by rememberLottieComposition(
-            LottieCompositionSpec.RawRes(R.raw.empty_data),
+            LottieCompositionSpec.RawRes(R.raw.error),
         )
         val progress by animateLottieCompositionAsState(
             composition,
