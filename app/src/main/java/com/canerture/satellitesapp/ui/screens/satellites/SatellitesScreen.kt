@@ -3,7 +3,6 @@ package com.canerture.satellitesapp.ui.screens.satellites
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -26,6 +25,9 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,6 +40,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.canerture.satellitesapp.R
 import com.canerture.satellitesapp.data.model.Satellite
+import com.canerture.satellitesapp.ui.base.components.EmptyDataScreen
 import com.canerture.satellitesapp.ui.base.components.SatellitesAlertDialog
 import com.canerture.satellitesapp.ui.base.components.SatellitesNormalText
 import com.canerture.satellitesapp.ui.base.components.SatellitesProgressBar
@@ -76,15 +79,9 @@ fun SatellitesScreen(
     when (effect) {
         SatellitesEffect.Idle -> Unit
         is SatellitesEffect.ShowError -> {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                SatellitesAlertDialog(
-                    message = effect.message
-                )
-            }
+            SatellitesAlertDialog(
+                message = effect.message
+            )
         }
     }
 
@@ -97,21 +94,31 @@ fun SatellitesScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        SatellitesSearchBar(
-            placeHolder = stringResource(R.string.search),
-            keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.Search,
-            keyboardActions = KeyboardActions(
-                onSearch = { focusManager.clearFocus() }
-            ),
-        ) { query ->
-            onQueryTextChange(query)
-        }
+        when (state) {
+            is SatellitesState.Loading ->
+                if (state.isLoading) SatellitesProgressBar(
+                    contentDesc = stringResource(R.string.loading_satellites)
+                )
 
-        SatellitesProgressBar(isVisible = state.isLoading)
+            is SatellitesState.SatellitesData -> {
+                SatellitesSearchBar(
+                    placeHolder = stringResource(R.string.search),
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Search,
+                    keyboardActions = KeyboardActions(
+                        onSearch = { focusManager.clearFocus() }
+                    ),
+                ) { query ->
+                    onQueryTextChange(query)
+                }
 
-        state.satellites?.let {
-            SatelliteLazyColumn(it, onSatelliteClick = onSatelliteClick)
+                SatelliteLazyColumn(
+                    satellites = state.satellites,
+                    onSatelliteClick = onSatelliteClick
+                )
+            }
+
+            SatellitesState.EmptyData -> EmptyDataScreen()
         }
     }
 }

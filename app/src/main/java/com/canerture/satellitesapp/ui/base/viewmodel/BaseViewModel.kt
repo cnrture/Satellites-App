@@ -2,12 +2,11 @@ package com.canerture.satellitesapp.ui.base.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<State : IState, Effect : IEffect> : ViewModel() {
@@ -19,15 +18,16 @@ abstract class BaseViewModel<State : IState, Effect : IEffect> : ViewModel() {
     private val _state: MutableStateFlow<State> = MutableStateFlow(initialState)
     val state: StateFlow<State> = _state
 
-    private val _effect: MutableSharedFlow<Effect> = MutableSharedFlow()
-    val effect: SharedFlow<Effect> = _effect.asSharedFlow()
+    private val _effect: Channel<Effect> = Channel()
+    val effect: Flow<Effect> = _effect.receiveAsFlow()
 
-    fun setState(reduce: State.() -> State) {
-        _state.update { getCurrentState().reduce() }
+    fun setState(state: State) {
+        viewModelScope.launch { _state.emit(state) }
     }
 
-    fun setEffect(effect: Effect) {
-        viewModelScope.launch { _effect.emit(effect) }
+    fun setEffect(builder: () -> Effect) {
+        val effectValue = builder()
+        viewModelScope.launch { _effect.send(effectValue) }
     }
 
     fun getCurrentState() = state.value

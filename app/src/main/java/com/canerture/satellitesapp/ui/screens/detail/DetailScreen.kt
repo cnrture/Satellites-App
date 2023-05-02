@@ -75,45 +75,48 @@ fun DetailScreen(
         verticalArrangement = Arrangement.Center
     ) {
 
-        SatellitesProgressBar(isVisible = state.isLoading)
+        when (state) {
+            DetailState.Loading ->
+                SatellitesProgressBar(
+                    contentDesc = stringResource(R.string.loading_detail)
+                )
+            is DetailState.SatelliteDetailData -> {
+                SatellitesHeadLineMediumText(text = state.satelliteName)
 
-        state.satelliteDetail?.let { satelliteDetail ->
+                Spacer(modifier = Modifier.height(16.dp))
 
-            SatellitesHeadLineMediumText(text = state.satelliteName.orEmpty())
+                SatellitesLightText(text = state.satelliteDetail.firstFlight.replace("-", "."))
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(48.dp))
 
-            SatellitesLightText(text = satelliteDetail.firstFlight.replace("-", "."))
+                Row {
+                    SatellitesBoldText(text = stringResource(R.string.height_mass))
+                    SatellitesNormalText(text = "${state.satelliteDetail.height}/${state.satelliteDetail.mass}")
+                }
 
-            Spacer(modifier = Modifier.height(48.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
-            Row {
-                SatellitesBoldText(text = stringResource(R.string.height_mass))
-                SatellitesNormalText(text = "${satelliteDetail.height}/${satelliteDetail.mass}")
-            }
+                Row {
+                    SatellitesBoldText(text = stringResource(R.string.cost))
+                    SatellitesNormalText(text = state.satelliteDetail.costPerLaunch.toString())
+                }
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
-            Row {
-                SatellitesBoldText(text = stringResource(R.string.cost))
-                SatellitesNormalText(text = satelliteDetail.costPerLaunch.toString())
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Row {
-                SatellitesBoldText(text = stringResource(R.string.last_position))
-                AnimatedContent(
-                    targetState = "(${state.position?.posX}, ${state.position?.posY})",
-                    transitionSpec = {
-                        slideInVertically { it } with slideOutVertically { -it }
-                    }, label = ""
-                ) { char ->
-                    SatellitesNormalText(text = char)
+                Row {
+                    SatellitesBoldText(text = stringResource(R.string.last_position))
+                    AnimatedContent(
+                        targetState = "(${state.position.posX}, ${state.position.posY})",
+                        transitionSpec = {
+                            slideInVertically { it } with slideOutVertically { -it }
+                        }, label = ""
+                    ) { char ->
+                        SatellitesNormalText(text = char)
+                    }
                 }
             }
-        } ?: kotlin.run {
-            EmptyDataScreen()
+
+            DetailState.EmptyData -> EmptyDataScreen()
         }
     }
 }

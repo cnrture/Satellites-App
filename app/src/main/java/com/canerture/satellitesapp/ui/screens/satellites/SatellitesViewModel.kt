@@ -22,7 +22,7 @@ class SatellitesViewModel @Inject constructor(
     private val stringResourceProvider: StringResourceProvider
 ) : BaseViewModel<SatellitesState, SatellitesEffect>() {
 
-    override fun setInitialState() = SatellitesState(true)
+    override fun setInitialState() = SatellitesState.Loading(true)
 
     init {
         getSatellites()
@@ -30,11 +30,11 @@ class SatellitesViewModel @Inject constructor(
 
     fun onQueryTextChange(query: String) = viewModelScope.launch {
         if (query.length > 2) {
-            setState { getCurrentState().copy(isLoading = true) }
+            setState(SatellitesState.Loading(true))
             delay(500)
             searchSatellites(query)
         } else {
-            setState { getCurrentState().copy(isLoading = true) }
+            setState(SatellitesState.Loading(true))
             getSatellites()
         }
     }
@@ -42,18 +42,19 @@ class SatellitesViewModel @Inject constructor(
     private fun getSatellites() {
         viewModelScope.launch {
             getSatellitesUseCase.invoke().collect {
-                setState { getCurrentState().copy(isLoading = false) }
+                setState(SatellitesState.Loading(false))
                 when (it) {
                     is GetSatellitesUseCaseImpl.GetSatellitesUseCaseState.Data -> {
-                        setState { getCurrentState().copy(satellites = it.satellites) }
+                        //setState(SatellitesState.SatellitesData(it.satellites))
+                        setState(SatellitesState.EmptyData)
                     }
 
                     is GetSatellitesUseCaseImpl.GetSatellitesUseCaseState.Error -> {
-                        setEffect(SatellitesEffect.ShowError(it.message))
+                        setEffect { SatellitesEffect.ShowError(it.message) }
                     }
 
                     GetSatellitesUseCaseImpl.GetSatellitesUseCaseState.EmptyData -> {
-                        setState { getCurrentState().copy(satellites = null) }
+                        setState(SatellitesState.EmptyData)
                     }
                 }
             }
@@ -63,18 +64,18 @@ class SatellitesViewModel @Inject constructor(
     private fun searchSatellites(query: String) {
         viewModelScope.launch {
             searchSatellitesUseCase.invoke(query).collect {
-                setState { getCurrentState().copy(isLoading = false) }
+                setState(SatellitesState.Loading(false))
                 when (it) {
                     is SearchSatellitesUseCaseImpl.SearchSatellitesUseCaseState.Data -> {
-                        setState { getCurrentState().copy(satellites = it.satellites) }
+                        setState(SatellitesState.SatellitesData(it.satellites))
                     }
 
                     is SearchSatellitesUseCaseImpl.SearchSatellitesUseCaseState.Error -> {
-                        setEffect(SatellitesEffect.ShowError(it.message))
+                        setEffect { SatellitesEffect.ShowError(it.message) }
                     }
 
                     SearchSatellitesUseCaseImpl.SearchSatellitesUseCaseState.EmptyData -> {
-                        setState { getCurrentState().copy(satellites = null) }
+                        setState(SatellitesState.EmptyData)
                     }
                 }
             }
@@ -82,12 +83,13 @@ class SatellitesViewModel @Inject constructor(
     }
 }
 
-data class SatellitesState(
-    val isLoading: Boolean = false,
-    val satellites: List<Satellite>? = null
-) : IState
+sealed interface SatellitesState : IState {
+    data class Loading(val isLoading: Boolean) : SatellitesState
+    data class SatellitesData(val satellites: List<Satellite>) : SatellitesState
+    object EmptyData : SatellitesState
+}
 
-sealed class SatellitesEffect : IEffect {
-    object Idle : SatellitesEffect()
-    data class ShowError(val message: String) : SatellitesEffect()
+sealed interface SatellitesEffect : IEffect {
+    object Idle : SatellitesEffect
+    data class ShowError(val message: String) : SatellitesEffect
 }

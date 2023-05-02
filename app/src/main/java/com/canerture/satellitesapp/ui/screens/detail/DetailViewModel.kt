@@ -25,13 +25,13 @@ class DetailViewModel @Inject constructor(
     private val stringResourceProvider: StringResourceProvider
 ) : BaseViewModel<DetailState, DetailEffect>() {
 
-    override fun setInitialState() = DetailState(true)
+    override fun setInitialState() = DetailState.Loading
 
     init {
-        getSatelliteDetail(getSatelliteArg())
+        getSatelliteDetail(getDetailArg())
     }
 
-    private fun getSatelliteArg() =
+    private fun getDetailArg() =
         getDataFromJsonString<Satellite>((savedStateHandle[Key.SATELLITE] ?: ""))
 
     private fun getSatelliteDetail(satellite: Satellite?) = viewModelScope.launch {
@@ -39,47 +39,42 @@ class DetailViewModel @Inject constructor(
             getSatelliteDetailUseCase.invoke(satellite.id).collect {
                 when (it) {
                     is GetSatelliteDetailUseCaseImpl.GetSatelliteDetailUseCaseState.Data -> {
-                        setState {
-                            getCurrentState().copy(
-                                isLoading = false,
-                                satelliteName = satellite.name,
-                                satelliteDetail = it.satelliteDetail,
-                                position = it.position
+                        setState(
+                            DetailState.SatelliteDetailData(
+                                satellite.name,
+                                it.satelliteDetail,
+                                it.position
                             )
-                        }
+                        )
                     }
 
                     is GetSatelliteDetailUseCaseImpl.GetSatelliteDetailUseCaseState.Error -> {
-                        setEffect(DetailEffect.ShowError(it.message))
-                        setState { getCurrentState().copy(isLoading = false) }
+                        setEffect { DetailEffect.ShowError(it.message) }
                     }
 
                     GetSatelliteDetailUseCaseImpl.GetSatelliteDetailUseCaseState.EmptyData -> {
-                        setState {
-                            getCurrentState().copy(
-                                isLoading = false,
-                                satelliteName = null,
-                                satelliteDetail = null,
-                                position = null
-                            )
-                        }
+                        setState(DetailState.EmptyData)
                     }
                 }
             }
         } ?: kotlin.run {
-            setEffect(DetailEffect.ShowError(stringResourceProvider.getString(R.string.something_went_wrong)))
+            setEffect { DetailEffect.ShowError(stringResourceProvider.getString(R.string.something_went_wrong))}
         }
     }
 }
 
-data class DetailState(
-    val isLoading: Boolean = false,
-    val satelliteName: String? = null,
-    val satelliteDetail: SatelliteDetail? = null,
-    val position: Position? = null
-) : IState
+sealed interface DetailState : IState {
+    object Loading : DetailState
+    data class SatelliteDetailData(
+        val satelliteName: String,
+        val satelliteDetail: SatelliteDetail,
+        val position: Position
+    ) : DetailState
 
-sealed class DetailEffect : IEffect {
-    object Idle : DetailEffect()
-    data class ShowError(val message: String) : DetailEffect()
+    object EmptyData : DetailState
+}
+
+sealed interface DetailEffect : IEffect {
+    object Idle : DetailEffect
+    data class ShowError(val message: String) : DetailEffect
 }
