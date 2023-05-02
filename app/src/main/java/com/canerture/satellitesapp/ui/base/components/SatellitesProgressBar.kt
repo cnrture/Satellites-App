@@ -14,35 +14,40 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import com.canerture.satellitesapp.R
 
 @Composable
 fun SatellitesProgressBar(
-    isVisible: Boolean,
+    contentDesc: String,
     modifier: Modifier = Modifier
 ) {
-    if (isVisible) {
-        val progressValue = 1f
-        val infiniteTransition = rememberInfiniteTransition(label = "")
+    val progressValue = 1f
+    val infiniteTransition = rememberInfiniteTransition(
+        label = stringResource(R.string.progress_bar_transition)
+    )
 
-        val progressAnimationValue by infiniteTransition.animateFloat(
-            initialValue = 0.0f,
-            targetValue = progressValue,
-            animationSpec = infiniteRepeatable(animation = tween(900)),
-            label = ""
+    val progressAnimationValue by infiniteTransition.animateFloat(
+        initialValue = 0.0f,
+        targetValue = progressValue,
+        animationSpec = infiniteRepeatable(animation = tween(900)),
+        label = stringResource(R.string.progress_bar_animation)
+    )
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = Color.White)
+            .semantics { contentDescription = contentDesc },
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            progress = progressAnimationValue,
+            modifier = Modifier
+                .wrapContentSize(),
+            color = Color.Red.copy(alpha = 0.8f)
         )
-
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .background(color = Color.White),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator(
-                progress = progressAnimationValue,
-                modifier = Modifier
-                    .wrapContentSize(),
-                color = Color.Red.copy(alpha = 0.8f)
-            )
-        }
     }
 }

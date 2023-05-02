@@ -1,6 +1,8 @@
 package com.canerture.satellitesapp.ui.base.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.AlertDialog
@@ -13,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun SatellitesAlertDialog(
@@ -25,22 +28,31 @@ fun SatellitesAlertDialog(
     if (dismissState) {
         Box(
             modifier = modifier
-                .fillMaxWidth()
-                .wrapContentSize(align = Alignment.Center)
+                .fillMaxSize()
+                .background(color = Color.DarkGray),
+            contentAlignment = Alignment.Center
         ) {
-            AlertDialog(
-                onDismissRequest = { dismissState = false },
-                text = {
-                    Text(text = message)
-                },
-                confirmButton = {
-                    Button(onClick = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentSize(align = Alignment.Center)
+            ) {
+                AlertDialog(
+                    onDismissRequest = {
                         dismissState = false
-                    }) {
-                        Text(text = "Okay")
+                    },
+                    text = {
+                        Text(text = message)
+                    },
+                    confirmButton = {
+                        Button(onClick = {
+                            dismissState = false
+                        }) {
+                            Text(text = "Okay")
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     }
 }

@@ -11,5 +11,11 @@
 
     <string name="search">"Search"</string>
 
-    <string name="something_went_wrong">"Something went wrong!"</string>
+    <string name="something_went_wrong">Something went wrong!</string>
+
+    <string name="progress_bar_transition">Progress Bar Transition</string>
+    <string name="progress_bar_animation">Progress Bar Animation</string>
+
+    <string name="loading_satellites">Loading Satellites</string>
+    <string name="loading_detail">Loading Detail</string>
 </resources>
