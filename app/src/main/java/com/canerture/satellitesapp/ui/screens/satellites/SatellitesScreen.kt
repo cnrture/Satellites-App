@@ -29,10 +29,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.canerture.satellitesapp.R
 import com.canerture.satellitesapp.data.model.Satellite
 import com.canerture.satellitesapp.ui.base.components.SatellitesAlertDialog
 import com.canerture.satellitesapp.ui.base.components.SatellitesNormalText
@@ -78,7 +80,7 @@ fun SatellitesScreen(
                 contentAlignment = Alignment.Center
             ) {
                 SatellitesAlertDialog(
-                    errorMessage = effect.message
+                    message = effect.message
                 )
             }
         }
@@ -94,7 +96,7 @@ fun SatellitesScreen(
     ) {
 
         SatellitesSearchBar(
-            placeHolder = "Search",
+            placeHolder = stringResource(R.string.search),
             keyboardType = KeyboardType.Text,
             imeAction = ImeAction.Search,
             keyboardActions = KeyboardActions(
@@ -148,7 +150,7 @@ fun SatelliteItem(
                     .wrapContentWidth(),
                 imageVector = if (satellite.active) Icons.Filled.Check else Icons.Filled.Close,
                 tint = Color.White,
-                contentDescription = ""
+                contentDescription = stringResource(R.string.active_passive_icon_desc)
             )
 
             Spacer(modifier = Modifier.width(24.dp))
@@ -160,7 +162,9 @@ fun SatelliteItem(
 
                 Spacer(modifier = Modifier.height(2.dp))
 
-                SatellitesNormalText(text = if (satellite.active) "Active" else "Passive")
+                SatellitesNormalText(
+                    text = stringResource(if (satellite.active) R.string.active else R.string.passive)
+                )
             }
         }
 

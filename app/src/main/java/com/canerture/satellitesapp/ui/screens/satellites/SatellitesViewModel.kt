@@ -1,12 +1,13 @@
 package com.canerture.satellitesapp.ui.screens.satellites
 
 import androidx.lifecycle.viewModelScope
+import com.canerture.satellitesapp.R
 import com.canerture.satellitesapp.data.model.Satellite
 import com.canerture.satellitesapp.domain.usecase.getsatellites.GetSatellitesUseCase
 import com.canerture.satellitesapp.domain.usecase.getsatellites.GetSatellitesUseCaseImpl
+import com.canerture.satellitesapp.infrastructure.StringResourceProvider
 import com.canerture.satellitesapp.ui.base.viewmodel.BaseViewModel
 import com.canerture.satellitesapp.ui.base.viewmodel.Effect
-import com.canerture.satellitesapp.ui.base.viewmodel.Event
 import com.canerture.satellitesapp.ui.base.viewmodel.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SatellitesViewModel @Inject constructor(
-    private val getSatellitesUseCase: GetSatellitesUseCase
+    private val getSatellitesUseCase: GetSatellitesUseCase,
+    private val stringResourceProvider: StringResourceProvider
 ) : BaseViewModel<SatellitesState, SatellitesEffect>() {
 
     override fun setInitialState() = SatellitesState(true)
@@ -51,7 +53,7 @@ class SatellitesViewModel @Inject constructor(
                 }
 
                 GetSatellitesUseCaseImpl.GetSatellitesUseCaseState.EmptyData -> {
-                    setEffect(SatellitesEffect.ShowError("it.message"))
+                    setEffect(SatellitesEffect.ShowError(stringResourceProvider.getString(R.string.something_went_wrong)))
                 }
             }
         }

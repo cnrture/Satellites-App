@@ -9,21 +9,16 @@ object Constants {
     }
 
     object Name {
-        const val ID = "id"
-        const val ACTIVE = "active"
-        const val NAME = "name"
         const val COST_PER_LAUNCH = "cost_per_launch"
         const val FIRST_FLIGHT = "first_flight"
-        const val HEIGHT = "height"
-        const val MASS = "mass"
-        const val LIST = "list"
-        const val POSITIONS = "positions"
-        const val POS_X = "posX"
-        const val POS_Y = "posY"
     }
 
     object Route {
         const val satellitesNavigationRoute = "satellites_route"
         const val detailNavigationRoute = "detail_route"
+    }
+
+    object Key {
+        const val SATELLITE = "satellite"
     }
 }

@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.with
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,13 +16,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.canerture.satellitesapp.R
 import com.canerture.satellitesapp.ui.base.components.SatellitesAlertDialog
 import com.canerture.satellitesapp.ui.base.components.SatellitesBoldText
 import com.canerture.satellitesapp.ui.base.components.SatellitesHeadLineText
 import com.canerture.satellitesapp.ui.base.components.SatellitesLightText
 import com.canerture.satellitesapp.ui.base.components.SatellitesNormalText
+import com.canerture.satellitesapp.ui.base.components.SatellitesProgressBar
 
 @Composable
 fun DetailRoute(
@@ -54,54 +58,55 @@ fun DetailScreen(
                 contentAlignment = Alignment.Center
             ) {
                 SatellitesAlertDialog(
-                    errorMessage = effect.message
+                    message = effect.message
                 )
             }
         }
     }
 
-    Box(
+    Column(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
-        contentAlignment = Alignment.Center
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        state.satelliteDetail?.let {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                SatellitesHeadLineText(text = state.satelliteName.orEmpty())
 
-                Spacer(modifier = Modifier.height(16.dp))
+        SatellitesProgressBar(isVisible = state.isLoading)
 
-                SatellitesLightText(text = it.firstFlight.replace("-", "."))
+        state.satelliteDetail?.let { satelliteDetail ->
 
-                Spacer(modifier = Modifier.height(48.dp))
+            SatellitesHeadLineText(text = state.satelliteName.orEmpty())
 
-                Row {
-                    SatellitesBoldText(text = "Height/Mass: ")
-                    SatellitesNormalText(text = "${it.height}/${it.mass}")
-                }
+            Spacer(modifier = Modifier.height(16.dp))
 
-                Spacer(modifier = Modifier.height(24.dp))
+            SatellitesLightText(text = satelliteDetail.firstFlight.replace("-", "."))
 
-                Row {
-                    SatellitesBoldText(text = "Cost: ")
-                    SatellitesNormalText(text = it.costPerLaunch.toString())
-                }
+            Spacer(modifier = Modifier.height(48.dp))
 
-                Spacer(modifier = Modifier.height(24.dp))
+            Row {
+                SatellitesBoldText(text = stringResource(R.string.height_mass))
+                SatellitesNormalText(text = "${satelliteDetail.height}/${satelliteDetail.mass}")
+            }
 
-                Row {
-                    SatellitesBoldText(text = "Last Position: ")
-                    AnimatedContent(
-                        targetState = "(${state.position?.posX}, ${state.position?.posY})",
-                        transitionSpec = {
-                            slideInVertically { it } with slideOutVertically { -it }
-                        }, label = ""
-                    ) { char ->
-                        SatellitesNormalText(text = char)
-                    }
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Row {
+                SatellitesBoldText(text = stringResource(R.string.cost))
+                SatellitesNormalText(text = satelliteDetail.costPerLaunch.toString())
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Row {
+                SatellitesBoldText(text = stringResource(R.string.last_position))
+                AnimatedContent(
+                    targetState = "(${state.position?.posX}, ${state.position?.posY})",
+                    transitionSpec = {
+                        slideInVertically { it } with slideOutVertically { -it }
+                    }, label = ""
+                ) { char ->
+                    SatellitesNormalText(text = char)
                 }
             }
         }

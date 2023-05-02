@@ -2,12 +2,15 @@ package com.canerture.satellitesapp.ui.screens.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.canerture.satellitesapp.R
+import com.canerture.satellitesapp.common.Constants.Key
 import com.canerture.satellitesapp.common.getDataFromJsonString
 import com.canerture.satellitesapp.data.model.Position
 import com.canerture.satellitesapp.data.model.Satellite
 import com.canerture.satellitesapp.data.model.SatelliteDetail
 import com.canerture.satellitesapp.domain.usecase.getsatellitedetail.GetSatelliteDetailUseCase
 import com.canerture.satellitesapp.domain.usecase.getsatellitedetail.GetSatelliteDetailUseCaseImpl
+import com.canerture.satellitesapp.infrastructure.StringResourceProvider
 import com.canerture.satellitesapp.ui.base.viewmodel.BaseViewModel
 import com.canerture.satellitesapp.ui.base.viewmodel.Effect
 import com.canerture.satellitesapp.ui.base.viewmodel.State
@@ -18,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val getSatelliteDetailUseCase: GetSatelliteDetailUseCase,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val stringResourceProvider: StringResourceProvider
 ) : BaseViewModel<DetailState, DetailEffect>() {
 
     override fun setInitialState() = DetailState(true)
@@ -29,7 +33,7 @@ class DetailViewModel @Inject constructor(
     }
 
     private fun getSatelliteArg() =
-        getDataFromJsonString<Satellite>((savedStateHandle["satellite"] ?: ""))
+        getDataFromJsonString<Satellite>((savedStateHandle[Key.SATELLITE] ?: ""))
 
     private fun getSatelliteDetail(satellite: Satellite?) = viewModelScope.launch {
         satellite?.let { satellite ->
@@ -51,12 +55,18 @@ class DetailViewModel @Inject constructor(
                     }
 
                     GetSatelliteDetailUseCaseImpl.GetSatelliteDetailUseCaseState.EmptyData -> {
-                        setEffect(DetailEffect.ShowError("it.message"))
+                        setState(
+                            getCurrentState().copy(
+                                satelliteName = null,
+                                satelliteDetail = null,
+                                position = null
+                            )
+                        )
                     }
                 }
             }
         } ?: kotlin.run {
-            setEffect(DetailEffect.ShowError("it.message"))
+            setEffect(DetailEffect.ShowError(stringResourceProvider.getString(R.string.something_went_wrong)))
         }
     }
 }

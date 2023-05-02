@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun SatellitesAlertDialog(
-    errorMessage: String,
+    message: String,
     modifier: Modifier = Modifier
 ) {
     var dismissState by remember {
@@ -31,7 +31,7 @@ fun SatellitesAlertDialog(
             AlertDialog(
                 onDismissRequest = { dismissState = false },
                 text = {
-                    Text(text = errorMessage)
+                    Text(text = message)
                 },
                 confirmButton = {
                     Button(onClick = {
