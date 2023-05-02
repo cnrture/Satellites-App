@@ -2,7 +2,8 @@ package com.canerture.satellitesapp.ui.screens.satellites
 
 import androidx.lifecycle.viewModelScope
 import com.canerture.satellitesapp.data.model.Satellite
-import com.canerture.satellitesapp.domain.usecase.GetSatellitesUseCase
+import com.canerture.satellitesapp.domain.usecase.getsatellites.GetSatellitesUseCase
+import com.canerture.satellitesapp.domain.usecase.getsatellites.GetSatellitesUseCaseImpl
 import com.canerture.satellitesapp.ui.base.viewmodel.BaseViewModel
 import com.canerture.satellitesapp.ui.base.viewmodel.Effect
 import com.canerture.satellitesapp.ui.base.viewmodel.Event
@@ -26,7 +27,7 @@ class SatellitesViewModel @Inject constructor(
 
     fun onQueryTextChange(query: String) = viewModelScope.launch {
         setState(getCurrentState().copy(isLoading = true))
-        delay(3000L)
+        delay(500L)
         if (query.length > 2) {
             setState(getCurrentState().copy(satellites = getCurrentState().satellites?.filter {
                 it.name.lowercase().contains(query.lowercase())
@@ -41,15 +42,15 @@ class SatellitesViewModel @Inject constructor(
         getSatellitesUseCase.invoke().collect {
             setState(getCurrentState().copy(isLoading = false))
             when (it) {
-                is GetSatellitesUseCase.GetSatellitesUseCaseState.Satellites -> {
+                is GetSatellitesUseCaseImpl.GetSatellitesUseCaseState.Data -> {
                     setState(getCurrentState().copy(satellites = it.satellites))
                 }
 
-                is GetSatellitesUseCase.GetSatellitesUseCaseState.Error -> {
+                is GetSatellitesUseCaseImpl.GetSatellitesUseCaseState.Error -> {
                     setEffect(SatellitesEffect.ShowError(it.message))
                 }
 
-                GetSatellitesUseCase.GetSatellitesUseCaseState.EmptyList -> {
+                GetSatellitesUseCaseImpl.GetSatellitesUseCaseState.EmptyData -> {
                     setEffect(SatellitesEffect.ShowError("it.message"))
                 }
             }
@@ -61,12 +62,6 @@ data class SatellitesState(
     val isLoading: Boolean = false,
     val satellites: List<Satellite>? = null
 ) : State
-
-sealed class SatellitesEvent : Event {
-    object Idle : SatellitesEvent()
-    data class QueryTextChanged(val query: String) : SatellitesEvent()
-    data class SatelliteClicked(val query: String) : SatellitesEvent()
-}
 
 sealed class SatellitesEffect : Effect {
     object Idle : SatellitesEffect()

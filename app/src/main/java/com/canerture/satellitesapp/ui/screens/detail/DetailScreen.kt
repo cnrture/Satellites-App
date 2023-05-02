@@ -74,9 +74,7 @@ fun DetailScreen(
 
                 Spacer(modifier = Modifier.height(48.dp))
 
-                Row(
-
-                ) {
+                Row {
                     SatellitesBoldText(text = "Height/Mass: ")
                     SatellitesNormalText(text = "${it.height}/${it.mass}")
                 }

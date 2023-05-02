@@ -14,9 +14,6 @@ import com.canerture.satellitesapp.ui.screens.satellites.satellitesScreen
 @Composable
 fun NavGraph() {
     val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-    val currentDestination = navController.currentBackStackEntryAsState().value?.destination
 
     NavHost(
         navController = navController,
