@@ -16,6 +16,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import com.canerture.satellitesapp.R
 
 @Composable
 fun SatellitesAlertDialog(
@@ -48,7 +50,7 @@ fun SatellitesAlertDialog(
                         Button(onClick = {
                             dismissState = false
                         }) {
-                            Text(text = "Okay")
+                            Text(text = stringResource(R.string.okay))
                         }
                     }
                 )

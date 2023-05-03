@@ -76,10 +76,11 @@ fun DetailScreen(
     ) {
 
         when (state) {
-            DetailState.Loading ->
-                SatellitesProgressBar(
+            is DetailState.Loading ->
+                if (state.isLoading) SatellitesProgressBar(
                     contentDesc = stringResource(R.string.loading_detail)
                 )
+
             is DetailState.SatelliteDetailData -> {
                 SatellitesHeadLineMediumText(text = state.satelliteName)
 

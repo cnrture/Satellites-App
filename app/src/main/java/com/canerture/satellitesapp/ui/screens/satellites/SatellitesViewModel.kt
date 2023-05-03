@@ -45,8 +45,7 @@ class SatellitesViewModel @Inject constructor(
                 setState(SatellitesState.Loading(false))
                 when (it) {
                     is GetSatellitesUseCaseImpl.GetSatellitesUseCaseState.Data -> {
-                        //setState(SatellitesState.SatellitesData(it.satellites))
-                        setState(SatellitesState.EmptyData)
+                        setState(SatellitesState.SatellitesData(it.satellites))
                     }
 
                     is GetSatellitesUseCaseImpl.GetSatellitesUseCaseState.Error -> {

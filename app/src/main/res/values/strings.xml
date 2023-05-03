@@ -9,7 +9,9 @@
 
     <string name="active_passive_icon_desc">Active, Passive Icon</string>
 
-    <string name="search">"Search"</string>
+    <string name="search">Search</string>
+
+    <string name="okay">Okay</string>
 
     <string name="something_went_wrong">Something went wrong!</string>
 

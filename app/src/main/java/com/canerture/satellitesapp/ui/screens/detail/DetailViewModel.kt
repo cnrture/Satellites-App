@@ -14,6 +14,7 @@ import com.canerture.satellitesapp.infrastructure.StringResourceProvider
 import com.canerture.satellitesapp.ui.base.viewmodel.BaseViewModel
 import com.canerture.satellitesapp.ui.base.viewmodel.IEffect
 import com.canerture.satellitesapp.ui.base.viewmodel.IState
+import com.canerture.satellitesapp.ui.screens.satellites.SatellitesState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,7 +26,7 @@ class DetailViewModel @Inject constructor(
     private val stringResourceProvider: StringResourceProvider
 ) : BaseViewModel<DetailState, DetailEffect>() {
 
-    override fun setInitialState() = DetailState.Loading
+    override fun setInitialState() = DetailState.Loading(true)
 
     init {
         getSatelliteDetail(getDetailArg())
@@ -35,6 +36,7 @@ class DetailViewModel @Inject constructor(
         getDataFromJsonString<Satellite>((savedStateHandle[Key.SATELLITE] ?: ""))
 
     private fun getSatelliteDetail(satellite: Satellite?) = viewModelScope.launch {
+        setState(DetailState.Loading(false))
         satellite?.let { satellite ->
             getSatelliteDetailUseCase.invoke(satellite.id).collect {
                 when (it) {
@@ -64,7 +66,7 @@ class DetailViewModel @Inject constructor(
 }
 
 sealed interface DetailState : IState {
-    object Loading : DetailState
+    data class Loading(val isLoading: Boolean) : DetailState
     data class SatelliteDetailData(
         val satelliteName: String,
         val satelliteDetail: SatelliteDetail,
