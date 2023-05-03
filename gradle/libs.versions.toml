@@ -20,6 +20,11 @@ accompanistNavigationAnimation = "0.31.1-alpha"
 lottie = "6.0.0"
 kotlinxSerialization = "1.5.0"
 pluginSerialization = "1.8.10"
+mockk = "1.13.5"
+mockitoKotlin = "4.0.0"
+mockitoCore = "5.0.0"
+turbine = "0.12.1"
+coroutines = "1.6.4"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -53,6 +58,11 @@ gson-google = { group = "com.google.code.gson", name = "gson", version.ref = "gs
 accompanist-navigation-animation = { group = "com.google.accompanist", name = "accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+unit-test-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+unit-test-mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockitoKotlin" }
+unit-test-mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockitoCore" }
+unit-test-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
+unit-test-turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

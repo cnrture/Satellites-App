@@ -1,5 +1,6 @@
 package com.canerture.satellitesapp.ui.screens.detail
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.canerture.satellitesapp.R
@@ -14,7 +15,6 @@ import com.canerture.satellitesapp.infrastructure.StringResourceProvider
 import com.canerture.satellitesapp.ui.base.viewmodel.BaseViewModel
 import com.canerture.satellitesapp.ui.base.viewmodel.IEffect
 import com.canerture.satellitesapp.ui.base.viewmodel.IState
-import com.canerture.satellitesapp.ui.screens.satellites.SatellitesState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -35,7 +35,8 @@ class DetailViewModel @Inject constructor(
     private fun getDetailArg() =
         getDataFromJsonString<Satellite>((savedStateHandle[Key.SATELLITE] ?: ""))
 
-    private fun getSatelliteDetail(satellite: Satellite?) = viewModelScope.launch {
+    @VisibleForTesting
+    fun getSatelliteDetail(satellite: Satellite?) = viewModelScope.launch {
         setState(DetailState.Loading(false))
         satellite?.let { satellite ->
             getSatelliteDetailUseCase.invoke(satellite.id).collect {
@@ -60,7 +61,7 @@ class DetailViewModel @Inject constructor(
                 }
             }
         } ?: kotlin.run {
-            setEffect { DetailEffect.ShowError(stringResourceProvider.getString(R.string.something_went_wrong))}
+            setEffect { DetailEffect.ShowError(stringResourceProvider.getString(R.string.something_went_wrong)) }
         }
     }
 }

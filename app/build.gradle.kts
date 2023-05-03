@@ -68,6 +68,11 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
     testImplementation(libs.junit)
+    testImplementation(libs.unit.test.mockk)
+    testImplementation(libs.unit.test.mockito.kotlin)
+    testImplementation(libs.unit.test.mockito.core)
+    testImplementation(libs.unit.test.coroutines)
+    testImplementation(libs.unit.test.turbine)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))
@@ -81,6 +86,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.navigation.compose)
 
+    implementation(libs.lifecycle.runtimeCompose)
+
     lintChecks(libs.lint.checks)
 
     implementation(libs.hilt.android)
@@ -92,8 +99,6 @@ dependencies {
     implementation(libs.room.ktx)
 
     implementation(libs.gson.google)
-
-    implementation(libs.lifecycle.runtimeCompose)
 
     implementation(libs.accompanist.navigation.animation)
 

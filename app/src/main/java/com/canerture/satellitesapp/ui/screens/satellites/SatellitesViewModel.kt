@@ -1,5 +1,6 @@
 package com.canerture.satellitesapp.ui.screens.satellites
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.viewModelScope
 import com.canerture.satellitesapp.data.model.Satellite
 import com.canerture.satellitesapp.domain.usecase.getsatellites.GetSatellitesUseCase
@@ -39,7 +40,8 @@ class SatellitesViewModel @Inject constructor(
         }
     }
 
-    private fun getSatellites() {
+    @VisibleForTesting
+    fun getSatellites() {
         viewModelScope.launch {
             getSatellitesUseCase.invoke().collect {
                 setState(SatellitesState.Loading(false))
@@ -60,7 +62,8 @@ class SatellitesViewModel @Inject constructor(
         }
     }
 
-    private fun searchSatellites(query: String) {
+    @VisibleForTesting
+    fun searchSatellites(query: String) {
         viewModelScope.launch {
             searchSatellitesUseCase.invoke(query).collect {
                 setState(SatellitesState.Loading(false))
