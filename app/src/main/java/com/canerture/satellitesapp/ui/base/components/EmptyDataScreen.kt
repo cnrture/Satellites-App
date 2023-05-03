@@ -1,5 +1,6 @@
 package com.canerture.satellitesapp.ui.base.components
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,7 +21,10 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.canerture.satellitesapp.R
 
 @Composable
-fun EmptyDataScreen(modifier: Modifier = Modifier) {
+fun EmptyDataScreen(
+    modifier: Modifier = Modifier,
+    @StringRes messageRes: Int? = null
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -41,6 +45,8 @@ fun EmptyDataScreen(modifier: Modifier = Modifier) {
             progress = { progress },
         )
 
-        SatellitesHeadLineSmallText(text = stringResource(id = R.string.something_went_wrong))
+        SatellitesHeadLineSmallText(
+            text = stringResource(id = messageRes ?: R.string.something_went_wrong)
+        )
     }
 }

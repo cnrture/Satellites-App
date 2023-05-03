@@ -15,6 +15,8 @@
 
     <string name="something_went_wrong">Something went wrong!</string>
 
+    <string name="satellite_not_found">Satellite not found!</string>
+
     <string name="progress_bar_transition">Progress Bar Transition</string>
     <string name="progress_bar_animation">Progress Bar Animation</string>
 

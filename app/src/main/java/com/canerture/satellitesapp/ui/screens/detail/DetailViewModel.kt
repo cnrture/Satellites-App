@@ -52,7 +52,7 @@ class DetailViewModel @Inject constructor(
                     }
 
                     is GetSatelliteDetailUseCaseImpl.GetSatelliteDetailUseCaseState.Error -> {
-                        setEffect { DetailEffect.ShowError(it.message) }
+                        setEffect { DetailEffect.ShowError(stringResourceProvider.getString(R.string.something_went_wrong)) }
                     }
 
                     GetSatelliteDetailUseCaseImpl.GetSatelliteDetailUseCaseState.EmptyData -> {

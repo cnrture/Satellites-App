@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.canerture.satellitesapp.common.Constants.Name
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,9 +13,9 @@ data class SatelliteDetail(
 
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    @SerializedName(Name.COST_PER_LAUNCH)
+    @SerialName(Name.COST_PER_LAUNCH)
     val costPerLaunch: Long,
-    @SerializedName(Name.FIRST_FLIGHT)
+    @SerialName(Name.FIRST_FLIGHT)
     val firstFlight: String,
     val height: Int,
     val mass: Long

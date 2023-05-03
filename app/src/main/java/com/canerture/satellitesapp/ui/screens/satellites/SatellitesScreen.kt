@@ -91,6 +91,17 @@ fun SatellitesScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
+        SatellitesSearchBar(
+            placeHolder = stringResource(R.string.search),
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Search,
+            keyboardActions = KeyboardActions(
+                onSearch = { focusManager.clearFocus() }
+            ),
+        ) { query ->
+            onQueryTextChange(query)
+        }
+
         when (state) {
             is SatellitesState.Loading ->
                 if (state.isLoading) SatellitesProgressBar(
@@ -98,24 +109,13 @@ fun SatellitesScreen(
                 )
 
             is SatellitesState.SatellitesData -> {
-                SatellitesSearchBar(
-                    placeHolder = stringResource(R.string.search),
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Search,
-                    keyboardActions = KeyboardActions(
-                        onSearch = { focusManager.clearFocus() }
-                    ),
-                ) { query ->
-                    onQueryTextChange(query)
-                }
-
                 SatelliteLazyColumn(
                     satellites = state.satellites,
                     onSatelliteClick = onSatelliteClick
                 )
             }
 
-            SatellitesState.EmptyData -> EmptyDataScreen()
+            SatellitesState.EmptyData -> EmptyDataScreen(messageRes = R.string.satellite_not_found)
         }
     }
 }

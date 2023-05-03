@@ -41,29 +41,15 @@ fun SatellitesSemiBoldText(
 @Composable
 fun SatellitesNormalText(
     text: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    color: Color = Color.Black,
 ) {
     Text(
         modifier = modifier,
         text = text,
         style = MaterialTheme.typography.bodyMedium,
         fontWeight = FontWeight.Normal,
-        color = Color.Black,
-        textAlign = TextAlign.Center
-    )
-}
-
-@Composable
-fun SatellitesLightText(
-    text: String,
-    modifier: Modifier = Modifier
-) {
-    Text(
-        modifier = modifier,
-        text = text,
-        style = MaterialTheme.typography.bodySmall,
-        fontWeight = FontWeight.Normal,
-        color = Color.Gray,
+        color = color,
         textAlign = TextAlign.Center
     )
 }

@@ -2,6 +2,7 @@ package com.canerture.satellitesapp.ui.screens.satellites
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.viewModelScope
+import com.canerture.satellitesapp.R
 import com.canerture.satellitesapp.data.model.Satellite
 import com.canerture.satellitesapp.domain.usecase.getsatellites.GetSatellitesUseCase
 import com.canerture.satellitesapp.domain.usecase.getsatellites.GetSatellitesUseCaseImpl
@@ -51,7 +52,9 @@ class SatellitesViewModel @Inject constructor(
                     }
 
                     is GetSatellitesUseCaseImpl.GetSatellitesUseCaseState.Error -> {
-                        setEffect { SatellitesEffect.ShowError(it.message) }
+                        setEffect {
+                            SatellitesEffect.ShowError(stringResourceProvider.getString(R.string.something_went_wrong))
+                        }
                     }
 
                     GetSatellitesUseCaseImpl.GetSatellitesUseCaseState.EmptyData -> {
@@ -73,7 +76,9 @@ class SatellitesViewModel @Inject constructor(
                     }
 
                     is SearchSatellitesUseCaseImpl.SearchSatellitesUseCaseState.Error -> {
-                        setEffect { SatellitesEffect.ShowError(it.message) }
+                        setEffect {
+                            SatellitesEffect.ShowError(stringResourceProvider.getString(R.string.something_went_wrong))
+                        }
                     }
 
                     SearchSatellitesUseCaseImpl.SearchSatellitesUseCaseState.EmptyData -> {

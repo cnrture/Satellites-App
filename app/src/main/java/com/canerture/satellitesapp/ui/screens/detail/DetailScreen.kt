@@ -18,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,7 +27,6 @@ import com.canerture.satellitesapp.ui.base.components.EmptyDataScreen
 import com.canerture.satellitesapp.ui.base.components.SatellitesAlertDialog
 import com.canerture.satellitesapp.ui.base.components.SatellitesBoldText
 import com.canerture.satellitesapp.ui.base.components.SatellitesHeadLineMediumText
-import com.canerture.satellitesapp.ui.base.components.SatellitesLightText
 import com.canerture.satellitesapp.ui.base.components.SatellitesNormalText
 import com.canerture.satellitesapp.ui.base.components.SatellitesProgressBar
 
@@ -86,7 +86,10 @@ fun DetailScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                SatellitesLightText(text = state.satelliteDetail.firstFlight.replace("-", "."))
+                SatellitesNormalText(
+                    text = state.satelliteDetail.firstFlight.replace("-", "."),
+                    color = Color.Gray
+                )
 
                 Spacer(modifier = Modifier.height(48.dp))
 
